@@ -4,9 +4,15 @@
  */
 
 var express = require('express')
-  , routes = require('./routes');
+  , routes = require('./routes'); // basicAuth - https://github.com/senchalabs/connect/blob/master/examples/basicAuth.js
 
 var app = module.exports = express.createServer();
+
+var basicAuth = express.basicAuth( 'bwell', 'ard' );
+
+var auth = function( user, pass ){
+	return ( user != pass );
+}
 
 // Configuration
 
@@ -16,7 +22,7 @@ app.configure(function(){
   app.use(express.bodyParser());
   app.use(express.methodOverride());
   app.use(app.router);
-  app.use(express.static(__dirname + '/public'));
+  app.use(express.static(__dirname + '/public'), basicAuth );
 });
 
 app.configure('development', function(){
@@ -28,9 +34,11 @@ app.configure('production', function(){
 });
 
 // Routes
+app.get('/', basicAuth, function(req,res, cb){
+		routes.index(req, res);
+});
 
-app.get('/', routes.index);
 
 app.listen(8080, function(){
-  console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
+  console.log("Express server listening on port %d in %s mode",app.address().port, app.settings.env);
 });
