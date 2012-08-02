@@ -33,7 +33,7 @@ app.configure('production', function(){
 });
 
 // Routes
-app.get('/', auth, function(req, res, next) {
+app.get('/', basicAuth, function(req, res, next) {
   return next();
 });
 app.use(express.static("" + __dirname + "/public"));
