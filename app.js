@@ -33,12 +33,10 @@ app.configure('production', function(){
 });
 
 // Routes
-app.get('/', basicAuth, function(req,res, cb){
-		routes.index(req, res);
+app.get('/', auth, function(req, res, next) {
+  return next();
 });
-
-// set up after routes to enable basicAuth on static files
-app.use(express.static(__dirname + '/public'), basicAuth );
+app.use(express.static("" + __dirname + "/public"));
 
 app.listen(8080, function(){
   console.log("Express server listening on port %d in %s mode",app.address().port, app.settings.env);
