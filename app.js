@@ -22,7 +22,6 @@ app.configure(function(){
   app.use(express.bodyParser());
   app.use(express.methodOverride());
   app.use(app.router);
-  app.use(express.static(__dirname + '/public'), basicAuth );
 });
 
 app.configure('development', function(){
@@ -38,6 +37,8 @@ app.get('/', basicAuth, function(req,res, cb){
 		routes.index(req, res);
 });
 
+// set up after routes to enable basicAuth on static files
+app.use(express.static(__dirname + '/public'), basicAuth );
 
 app.listen(8080, function(){
   console.log("Express server listening on port %d in %s mode",app.address().port, app.settings.env);
